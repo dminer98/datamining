@@ -5,12 +5,15 @@ from datetime import timedelta
 
 pro_data = pd.read_excel('Desktop/Pro_list.xlsx',
                          header=0)
-pro_data['indate'] = pro_data['indate'].astype('datetime64')
+pro_data['indate'] = pro_data['indate'].astype('datetime64') #엑셀의 object type을 datetime64 type로 변환
 pro_data['pro_indate'] = pro_data['pro_indate'].astype('datetime64')
 pro_data['pro_outdate'] = pro_data['pro_outdate'].astype('datetime64')
-pro_data['diff']= (pro_data['pro_indate'] - pro_data['indate']).dt.days / 30 + 1
-pro_data['diff']= pro_data['diff'].astype(int)
+#가입일과 전환일 사이의 경과일을 계산하고 30으로 나눔 (month method 를 써도됨)
+pro_data['diff']= (pro_data['pro_indate'] - pro_data['indate']).dt.days / 30 + 1  
+pro_data['diff']= pro_data['diff'].astype(int)  
+#tabulate 를 위해 월 범주 데이터를 만듦 
 pro_data['in_month'] = pro_data['indate'].dt.month
+#특정 날짜 이후의 가입자를 추출
 condition = pro_data['indate'] > '20200101'
 pro_data1 = pro_data[condition]
 pro_data1.head()
