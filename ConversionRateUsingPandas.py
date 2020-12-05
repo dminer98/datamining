@@ -45,3 +45,45 @@ conv = pd.pivot_table(conv_data1,                # 피벗할 데이터프레임
 print(conv)
 
 conv.to_excel('Desktop/churn.xlsx')
+
+
+#전환율에 영향을 주는 변수들에 대한 산점도와 추세선 그리기
+
+
+from matplotlib import pyplot
+plotdata = pd.read_excel('Desktop/Activation.xlsx',
+                         header=1)
+plotdata.head(5)
+
+y =  plotdata['1개월내 전환율']
+x =  plotdata['Activation 율']
+
+# 추세선을 위한 계산 - 1차원의 polynomial(다항식)을 계산하기 위한 코드.
+z = np.polyfit(y, x, 1)   # (X,Y,차원) 정의
+f = np.poly1d(z)          # 1차원 다항식에 대한 연산을 캡슐화
+
+plotdata.plot.scatter(x='1개월내 전환율', y='Activation 율', color='#ff6600', marker='o')
+pyplot.grid()
+pyplot.title("Activation rate vs Conversion rate in 1 month")
+pyplot.xlabel('Conversion rate in 1 month')              # y축 라벨
+pyplot.ylabel('Activation rate')              # x축 라벨
+pyplot.plot(y,f(y),'#ff0000')         # 추세선
+#pyplot.show()
+pyplot.savefig('Desktop/act vs con.png')
+
+y =  plotdata['Activation 대비 1개월내 전환율']
+x =  plotdata['Activation 율']
+
+# 추세선을 위한 계산 - 1차원의 polynomial(다항식)을 계산하기 위한 코드.
+z = np.polyfit(y, x, 1)   # (X,Y,차원) 정의
+f = np.poly1d(z)          # 1차원 다항식에 대한 연산을 캡슐화
+
+plotdata.plot.scatter(x='Activation 대비 1개월내 전환율', y='Activation 율', color='#ff6600', marker='o')
+pyplot.grid()
+pyplot.title("Activation rate vs Conversion rate in 1 month")
+pyplot.xlabel('Conversion rate of activated user')              # y축 라벨
+pyplot.ylabel('Activation rate')              # x축 라벨
+pyplot.plot(y,f(y),'#ff0000')         # 추세선
+#pyplot.show()
+pyplot.savefig('Desktop/act vs con_of_activateuser.png')
+
